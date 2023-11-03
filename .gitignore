@@ -1,0 +1,18 @@
+# ignore everything by default
+**/*
+
+# allow specific items
+!**/*.go
+!**/go.mod
+!**/go.sum
+
+!.gitignore
+
+!README.md
+!LICENSE
+
+!.envrc
+!shell.nix
+
+!.github
+!.github/**
