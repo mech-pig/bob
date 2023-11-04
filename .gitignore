@@ -6,6 +6,9 @@
 !**/go.mod
 !**/go.sum
 
+!examples
+!examples/**
+
 !.gitignore
 
 !README.md
