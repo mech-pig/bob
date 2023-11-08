@@ -14,8 +14,8 @@ go get github.com/mech-pig/bob
 
 ## Usage
 
-### Create a factory
-A factory is created by providing a function that is used to generate a default instance.
+### Create a builder
+A builder is created by providing a function that is used to generate a default instance.
 
 ```go
 type User struct {
@@ -23,7 +23,7 @@ type User struct {
     Age int
 }
 
-userFactory := bob.New(func () User {
+userBuilder := bob.New(func () User {
     return User{
         Name: "test",
         Age: 18,
@@ -36,7 +36,7 @@ userFactory := bob.New(func () User {
 Instances are created with the `Build` method.
 
 ```go
-userFactory.Build()
+userBuilder.Build()
 ```
 
 The build method accepts an optional list of functions that are used to customize the instance. An override function takes an instance as input and returns a modified one.
@@ -47,22 +47,22 @@ func nameIsBob(u User) User {
     return u
 }
 
-func is15(u User) User {
+func ageIs15(u User) User {
     u.Age = 15
     return u
 }
 
-userFactory.Build(nameIsBob, is15)
+userBuilder.Build(nameIsBob, is15)
 ```
 
-### Derive factory from an existing one
+### Derive builder from an existing one
 
-The `Override` method can be used to derive a new factory from an existing one:
+The `Override` method can be used to derive a new builder from an existing one:
 
 ```go
 
-bobUserFactory := userFactory.Override(nameIsBob)
-bobUserFactory.Build()
+bobUserBuilder := userBuilder.Override(nameIsBob)
+bobUserBuilder.Build()
 ```
 
 ### Build many instances
@@ -70,13 +70,13 @@ bobUserFactory.Build()
 The `BuildMany` method is used to build multiple instances at once. It accepts an `int` to indicate the number of instances that will be generated.
 
 ```go
-userFactor.BuildMany(5)
+userBuilder.BuildMany(5)
 ```
 
 Like `Build`, it's possible to customise the generated instances by providing one or more overriding functions. Each of these function takes as input an index and the default instance
 
 ```go
-userFactory.BuildMany(3, func (i int, u User) User {
+userBuilder.BuildMany(3, func (i int, u User) User {
     u.Name = fmt.Sprint("user-", i)
     return u
 })
