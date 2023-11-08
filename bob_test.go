@@ -14,13 +14,13 @@ type testTargetStruct struct {
 
 func TestBuildDefault(t *testing.T) {
 	defaultInstance := testTargetStruct{a: "a", b: "b"}
-	factory := New(func() testTargetStruct { return defaultInstance })
-	require.Equal(t, defaultInstance, factory.Build())
+	builder := New(func() testTargetStruct { return defaultInstance })
+	require.Equal(t, defaultInstance, builder.Build())
 }
 
 func TestBuildWithOverrides(t *testing.T) {
 	defaultInstance := testTargetStruct{a: "a", b: "b"}
-	factory := New(func() testTargetStruct { return defaultInstance })
+	builder := New(func() testTargetStruct { return defaultInstance })
 
 	testCases := []struct {
 		name      string
@@ -88,21 +88,21 @@ func TestBuildWithOverrides(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			require.Equal(t, tc.expected, factory.Build(tc.overrides...))
+			require.Equal(t, tc.expected, builder.Build(tc.overrides...))
 		})
 	}
 }
 
 func TestBuildManyDefault(t *testing.T) {
 	defaultInstance := testTargetStruct{a: "a", b: "b"}
-	factory := New(func() testTargetStruct { return defaultInstance })
+	builder := New(func() testTargetStruct { return defaultInstance })
 	expected := []testTargetStruct{defaultInstance, defaultInstance, defaultInstance}
-	require.Equal(t, expected, factory.BuildMany(len(expected)))
+	require.Equal(t, expected, builder.BuildMany(len(expected)))
 }
 
 func TestBuildManyWithOverrides(t *testing.T) {
 	defaultInstance := testTargetStruct{a: "a", b: "b"}
-	factory := New(func() testTargetStruct { return defaultInstance })
+	builder := New(func() testTargetStruct { return defaultInstance })
 
 	testCases := []struct {
 		name      string
@@ -189,15 +189,15 @@ func TestBuildManyWithOverrides(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			require.Equal(t, tc.expected, factory.BuildMany(len(tc.expected), tc.overrides...))
+			require.Equal(t, tc.expected, builder.BuildMany(len(tc.expected), tc.overrides...))
 		})
 	}
 }
 
 func TestOverride(t *testing.T) {
 	defaultInstance := testTargetStruct{a: "a", b: "b"}
-	factory := New(func() testTargetStruct { return defaultInstance })
-	derived := factory.Override(func(instance testTargetStruct) testTargetStruct {
+	builder := New(func() testTargetStruct { return defaultInstance })
+	derived := builder.Override(func(instance testTargetStruct) testTargetStruct {
 		instance.a = "derived"
 		return instance
 	})
